@@ -1,0 +1,17 @@
+{
+"name": "devils_advocate_flow",
+"steps": [
+{ "id": "receive_input", "type": "http_receive" },
+{
+"id": "call_worker",
+"type": "action",
+"action": {
+"type": "http_request",
+"url": "https://<your-worker-url>/",
+"method": "POST",
+"body": "${input.body}"
+}
+},
+{ "id": "reply", "type": "http_reply", "body": "${outputs.call_worker.body}" }
+]
+}
