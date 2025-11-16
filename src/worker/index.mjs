@@ -1,8 +1,8 @@
 export default {
   async fetch(request) {
-    // CORS headers
+    // Common CORS headers
     const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',   // allow all origins (or Pages URL)
+      'Access-Control-Allow-Origin': '*', // or Pages URL if you want stricter security
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     };
@@ -12,6 +12,7 @@ export default {
       return new Response(null, { headers: corsHeaders });
     }
 
+    // Only handle POST requests for AI
     if (request.method === 'POST') {
       let data;
       try {
@@ -28,14 +29,17 @@ export default {
       const body = {
         model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
         messages: [
-          { role: 'system', content: "You are Devil's Advocate. Always argue the opposite of the user's point. If there are no more logical arguments against the user, the user has won" },
+          {
+            role: 'system',
+            content: "You are Devil's Advocate. Always argue the opposite of the user's point. If there are no more logical arguments against the user, the user has won"
+          },
           { role: 'user', content: message }
         ],
         temperature: 0.7,
         max_tokens: 300
       };
 
-      // Call the Workers AI endpoint
+      // Call Workers AI endpoint
       const res = await fetch('https://api.cloudflare.com/client/v4/worker-ai/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,7 +53,7 @@ export default {
       });
     }
 
-    // GET fallback
+    // Fallback for GET requests
     return new Response("Devil's Advocate Worker", { headers: corsHeaders });
   }
 };
