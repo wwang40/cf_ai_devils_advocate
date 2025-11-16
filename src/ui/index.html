@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-<meta charset="UTF-8">
-<title>Page Title</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="">
-<style>
-</style>
-<script src=""></script>
-<body>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title style="text-align: center;">Devil's Advocate Chat</title>
+</head>
+<body style="text-align: center;">
+<h1>Devil's Advocate</h1>
+<textarea id="input" rows="5" cols="50"></textarea><br>
+<button onclick="send()">Debate Me</button>
+<pre id="out"></pre>
 
-<img src="img_la.jpg" alt="LA" style="width:100%">
 
-<div class="">
- <h1>This is a Heading</h1>
- <p>This is a paragraph.</p>
- <p>This is another paragraph.</p>
-</div>
-
+<script>
+async function send() {
+const message = document.getElementById('input').value;
+const res = await fetch('/api/chat', {
+method: 'POST',
+body: JSON.stringify({ message })
+});
+const data = await res.json();
+document.getElementById('out').textContent = data.result || JSON.stringify(data);
+}
+</script>
 </body>
 </html>
