@@ -14,7 +14,7 @@
 <script>
 async function send() {
 const message = document.getElementById('input').value;
-const res = await fetch('/api/chat', {
+const res = await fetch('https://devilsadvocate.wwang7049.workers.dev/', {
 method: 'POST',
 body: JSON.stringify({ message })
 });
